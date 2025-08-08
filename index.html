@@ -1,234 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>TalkBud — Demo escolar (TTS & MP3)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#071227;--card:#0b1520;--muted:#9aa4b2;--accent:#7dd3fc}
-  body{font-family:Inter,system-ui,Arial;margin:0;background:linear-gradient(180deg,#041326,#071227);color:#e6eef8;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:28px}
-  .wrap{width:100%;max-width:1100px;display:grid;grid-template-columns:1fr 360px;gap:18px}
-  .card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
-  h1{margin:0 0 8px 0;font-size:20px}
-  label{display:block;color:var(--muted);font-size:13px;margin-top:8px}
-  textarea{width:100%;min-height:140px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-  select,input{padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
-  .row{display:flex;gap:8px;align-items:center;margin-top:10px}
-  button{background:var(--accent);border:none;color:#032;padding:8px 12px;border-radius:8px;cursor:pointer}
-  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent)}
-  .small{font-size:13px;color:var(--muted)}
-  audio{width:100%;margin-top:12px;background:#000;border-radius:8px;padding:6px}
-  .note{font-size:13px;color:var(--muted);margin-top:8px}
-  ol.note{padding-left:18px;color:var(--muted)}
-  @media (max-width:880px){.wrap{grid-template-columns:1fr;padding:12px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkBud Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            font-size: 1.8em;
+        }
+        main {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        audio {
+            margin-top: 10px;
+        }
+        .modes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .mode {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            width: 250px;
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- MAIN -->
-    <main class="card">
-      <h1>TalkBud — Demo escolar (Generador de MP3)</h1>
-      <p class="small">Genera archivos MP3 desde texto (ElevenLabs) o descarga grabaciones. Luego copia el MP3 a la tarjeta microSD de tu placa GC03.</p>
 
-      <label for="text">Frase</label>
-      <textarea id="text">Hola, soy TalkBud. Presiona el botón para reproducir.</textarea>
+    <header>🎤 TalkBud Demo</header>
 
-      <label for="voice">Voz</label>
-      <select id="voice">
-        <option value="ErXwobaYiN019PkySvjV">Antoni (ES)</option>
-        <option value="pNInz6obpgDQGcFmaJgB">Paula (ES)</option>
-        <option value="21m00Tcm4TlvDq8ikWAM">Rachel (EN)</option>
-      </select>
+    <main>
+        <div class="card">
+            <h2>Graba tu audio</h2>
+            <p>Pulsa para grabar un mensaje y luego descárgalo para usarlo en tu dispositivo.</p>
+            <button id="startBtn">🎙️ Iniciar grabación</button>
+            <button id="stopBtn" disabled>⏹️ Detener grabación</button>
+            <br>
+            <audio id="audioPlayback" controls></audio>
+            <br>
+            <a id="downloadLink" style="display:none;">⬇️ Descargar audio</a>
+        </div>
 
-      <div class="row">
-        <button id="genBtn">Generar MP3</button>
-        <button id="recordBtn" class="ghost">Grabar micrófono</button>
-        <button id="stopRecBtn" class="ghost" disabled>Detener</button>
-        <div style="margin-left:auto"><span id="status" class="small"></span></div>
-      </div>
+        <div class="card">
+            <h2>Cómo subir el audio al dispositivo</h2>
+            <ol style="text-align: left;">
+                <li>Conecta el dispositivo a tu computadora usando un cable USB.</li>
+                <li>Enciéndelo y espera que aparezca como carpeta en el explorador de archivos.</li>
+                <li>Arrastra y suelta el audio descargado dentro de esa carpeta.</li>
+                <li>Puedes subir varios audios, incluso grabaciones propias.</li>
+                <li>Desconecta el dispositivo y ¡listo!</li>
+            </ol>
+        </div>
 
-      <audio id="player" controls style="display:none"></audio>
-
-      <div id="fileInfo" class="note"></div>
-
-      <label class="note" style="margin-top:12px">(Opcional) Selecciona un archivo de audio local para renombrar y preparar para la GC03</label>
-      <input id="fileInput" type="file" accept="audio/*">
-      <div class="row" style="margin-top:8px">
-        <button id="prepareLocal" class="ghost">Preparar archivo para GC03</button>
-      </div>
-
-      <div class="note" style="margin-top:12px">
-        <strong>Nota técnica:</strong> Los navegadores no convierten fácilmente WebM→MP3 en cliente; la generación desde ElevenLabs devuelve MP3 directamente.
-      </div>
-
-      <div class="note" style="margin-top:10px;color:#ffd7a6">
-        <strong>Seguridad:</strong> Este demo hace la llamada a la API desde el navegador (modo escolar). <em>No subas</em> este archivo con tu API key a repositorios públicos.
-      </div>
+        <div class="card">
+            <h2>Modos de reproducción</h2>
+            <div class="modes">
+                <div class="mode">
+                    <h3>Modo 1</h3>
+                    <p>Reproduce un audio por vez y se detiene.</p>
+                </div>
+                <div class="mode">
+                    <h3>Modo 2</h3>
+                    <p>Reproduce todos los audios en orden alfabético y luego se detiene.</p>
+                </div>
+                <div class="mode">
+                    <h3>Modo 3</h3>
+                    <p>Reproduce todos los audios sin parar en bucle.</p>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- SIDE -->
-    <aside class="card">
-      <h3>Cómo copiar los audios a la placa GC03</h3>
-      <ol class="note">
-        <li>Conecta la placa GC03 al PC por USB o extrae la microSD al lector.</li>
-        <li>Enciende la placa si necesita energía.</li>
-        <li>Abre el Explorador de archivos (Windows) o Finder (Mac).</li>
-        <li>Localiza la unidad de la tarjeta microSD o dispositivo.</li>
-        <li>Arrastra los archivos MP3 descargados a la carpeta raíz (o la carpeta indicada por tu módulo).</li>
-        <li>Usa nombres sencillos como <code>0001.mp3</code>, <code>0002.mp3</code>.</li>
-        <li>Expulsa la tarjeta de forma segura y prueba la reproducción.</li>
-      </ol>
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
 
-      <h4 style="margin-top:12px">Consejos</h4>
-      <p class="note">Si tu placa reproduce en orden numérico, pon números al inicio del nombre. Si no, consulta el manual de tu GC03 para el formato exacto.</p>
+        document.getElementById('startBtn').addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
 
-      <hr style="border-color:rgba(255,255,255,0.03)">
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) audioChunks.push(event.data);
+            };
 
-      <h4>Configuración de la demo (local)</h4>
-      <p class="note">Pega tu API key de ElevenLabs en la constante <code>API_KEY</code> dentro del archivo (ver medio debajo). Esta versión es para uso local y escolar.</p>
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(audioChunks, { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                const audio = document.getElementById('audioPlayback');
+                const downloadLink = document.getElementById('downloadLink');
 
-      <div style="margin-top:12px;color:var(--muted);font-size:13px">Proyecto TalkBud — Demo escolar</div>
-    </aside>
-  </div>
+                audio.src = url;
+                downloadLink.href = url;
+                downloadLink.download = 'talkbud_audio.wav';
+                downloadLink.style.display = 'inline-block';
+                downloadLink.textContent = '⬇️ Descargar audio';
+            };
 
-<script>
-/*
-  Demo escolar: Genera MP3 desde ElevenLabs (cliente).
-  USO LOCAL: abre index.html en tu navegador. Reemplaza API_KEY por tu clave localmente.
-  ADVERTENCIA: No subas esto a repositorios públicos con tu API key dentro.
-*/
+            mediaRecorder.start();
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+        });
 
-// === CONFIG - coloca tu key LOCALMENTE en esta variable en tu copia ===
-const API_KEY = 'REPLACE_WITH_YOUR_API_KEY';
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            mediaRecorder.stop();
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        });
+    </script>
 
-// Endpoint ElevenLabs
-function elevenEndpoint(voiceId){
-  return `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
-}
-
-// util: nombre archivo
-function makeFilename(){
-  const t = new Date();
-  const y = t.getFullYear();
-  const m = String(t.getMonth()+1).padStart(2,'0');
-  const d = String(t.getDate()).padStart(2,'0');
-  const hh = String(t.getHours()).padStart(2,'0');
-  const mm = String(t.getMinutes()).padStart(2,'0');
-  return `talkbud_${y}${m}${d}_${hh}${mm}.mp3`;
-}
-
-const genBtn = document.getElementById('genBtn');
-const statusEl = document.getElementById('status');
-const player = document.getElementById('player');
-const fileInfo = document.getElementById('fileInfo');
-
-function setStatus(txt, err=false){
-  statusEl.textContent = txt;
-  statusEl.style.color = err? '#ffb4b4':'#bfefff';
-}
-
-// Generar MP3 desde ElevenLabs (cliente)
-genBtn.addEventListener('click', async ()=>{
-  if(API_KEY === 'REPLACE_WITH_YOUR_API_KEY'){ alert('Pega tu API key en la variable API_KEY dentro de este archivo antes de usar.'); return; }
-  const text = document.getElementById('text').value.trim();
-  if(!text){ alert('Escribe una frase'); return; }
-
-  const voiceId = document.getElementById('voice').value;
-  setStatus('Generando audio...');
-  genBtn.disabled = true;
-
-  try{
-    const res = await fetch(elevenEndpoint(voiceId), {
-      method:'POST',
-      headers:{
-        'Accept':'audio/mpeg',
-        'Content-Type':'application/json',
-        'xi-api-key': API_KEY
-      },
-      body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-      })
-    });
-
-    if(!res.ok){
-      const txt = await res.text();
-      throw new Error(txt || `HTTP ${res.status}`);
-    }
-
-    const blob = await res.blob();
-    // blob should be audio/mpeg
-    if(!blob.type.startsWith('audio')) throw new Error('Respuesta no es audio: ' + blob.type);
-
-    const url = URL.createObjectURL(blob);
-    player.style.display = 'block';
-    player.src = url;
-    try{ player.play().catch(()=>{}); }catch(e){}
-    // trigger download
-    const a = document.createElement('a');
-    const filename = makeFilename();
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    fileInfo.innerHTML = `<div class="small">Archivo generado: <strong>${filename}</strong> — descárgalo y cópialo a la microSD de la placa.</div>`;
-    setStatus('Generado y descargado: ' + filename);
-  }catch(err){
-    console.error(err);
-    setStatus('Error: ' + (err.message||err), true);
-    alert('Error al generar audio. Revisa la consola para más detalles.');
-  } finally {
-    genBtn.disabled = false;
-  }
-});
-
-// Grabación desde micrófono (cliente) — guarda como webm; puedes convertir fuera del navegador
-let mediaRec, recordedChunks=[];
-const recordBtn = document.getElementById('recordBtn');
-const stopRecBtn = document.getElementById('stopRecBtn');
-
-recordBtn.addEventListener('click', async ()=>{
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ alert('Tu navegador no soporta grabación. Usa Chrome/Edge/Firefox modernos.'); return; }
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
-    mediaRec = new MediaRecorder(stream);
-    recordedChunks = [];
-    mediaRec.ondataavailable = e => { if(e.data && e.data.size>0) recordedChunks.push(e.data); };
-    mediaRec.onstop = async ()=>{
-      const blob = new Blob(recordedChunks, { type:'audio/webm' });
-      const url = URL.createObjectURL(blob);
-      const filename = makeFilename().replace('.mp3','.webm');
-      // download recorded webm
-      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setStatus('Grabación descargada: ' + filename);
-      fileInfo.innerHTML = `<div class="small">Grabación: <strong>${filename}</strong> (formato webm). Conviértela a MP3 si tu GC03 requiere MP3.</div>`;
-    };
-    mediaRec.start();
-    setStatus('Grabando...'); recordBtn.disabled = true; stopRecBtn.disabled = false;
-  }catch(err){ console.error(err); setStatus('No se pudo acceder al micrófono', true); }
-});
-
-stopRecBtn.addEventListener('click', ()=>{
-  if(mediaRec && mediaRec.state !== 'inactive'){ mediaRec.stop(); recordBtn.disabled = false; stopRecBtn.disabled = true; }
-});
-
-// Preparar archivo local (renombrar para GC03)
-document.getElementById('prepareLocal').addEventListener('click', ()=>{
-  const fi = document.getElementById('fileInput');
-  if(!fi.files || fi.files.length===0){ alert('Selecciona un archivo primero'); return; }
-  const file = fi.files[0];
-  // create downloadable copy with GC03-friendly name
-  const url = URL.createObjectURL(file);
-  const a = document.createElement('a');
-  const filename = makeFilename();
-  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setStatus('Archivo preparado: ' + filename);
-  fileInfo.innerHTML = `<div class="small">Archivo listo: <strong>${filename}</strong>. Copia a la microSD.</div>`;
-});
-</script>
 </body>
 </html>
