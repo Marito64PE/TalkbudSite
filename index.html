@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -16,31 +15,28 @@
     h1{font-size:20px;margin:0}
     p.lead{margin:0;color:var(--muted);font-size:13px}
 
-```
-.grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
-.card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;box-shadow:0 4px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;box-shadow:0 4px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
 
-label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-textarea{width:100%;min-height:140px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:inherit;outline:none;resize:vertical}
-select,input[type=text],input[type=file]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    textarea{width:100%;min-height:140px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:inherit;outline:none;resize:vertical}
+    select,input[type=text],input[type=file]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
 
-.row{display:flex;gap:10px;align-items:center}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:#022;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--accent)}
-.small{font-size:12px;color:var(--muted)}
-.list{max-height:320px;overflow:auto;margin-top:10px;padding-right:6px}
-.item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02)}
-.meta{display:flex;gap:10px;align-items:center}
-.filename{font-weight:600}
-.actions{display:flex;gap:8px}
-audio{width:100%;margin-top:12px;background:#000;border-radius:8px;padding:6px}
-.note{font-size:13px;color:var(--muted);margin-top:8px}
-ol.note{padding-left:18px;color:var(--muted)}
-footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
+    .row{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:#022;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--accent)}
+    .small{font-size:12px;color:var(--muted)}
+    .list{max-height:320px;overflow:auto;margin-top:10px;padding-right:6px}
+    .item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02)}
+    .meta{display:flex;gap:10px;align-items:center}
+    .filename{font-weight:600}
+    .actions{display:flex;gap:8px}
+    audio{width:100%;margin-top:12px;background:#000;border-radius:8px;padding:6px}
+    .note{font-size:13px;color:var(--muted);margin-top:8px}
+    ol.note{padding-left:18px;color:var(--muted)}
+    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
 
-@media (max-width:880px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
-```
-
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
   </style>
 </head>
 <body>
@@ -48,112 +44,102 @@ footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
     <header>
       <div class="logo">TB</div>
       <div>
-        <h1>TalkBud — Audio Manager (Demo escolar)</h1>
-        <p class="lead">Genera, reproduce y prepara audios para tu dispositivo — diseño minimalista y seguro.</p>
+        <h1>Audio Manager (Demo escolar)</h1>
+        <p class="lead">Genera, reproduce y prepara audios para tu dispositivo.</p>
       </div>
     </header>
 
-```
-<div class="grid">
-  <!-- MAIN -->
-  <main class="card">
-    <label for="text">Frase</label>
-    <textarea id="text">Hola, soy TalkBud. Presiona el botón para reproducir.</textarea>
+    <div class="grid">
+      <!-- MAIN -->
+      <main class="card">
+        <label for="text">Frase</label>
+        <textarea id="text">Hola, soy TalkBud. Presiona el botón para reproducir.</textarea>
 
-    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:160px;">
-        <label for="voice">Voz (ElevenLabs)</label>
-        <select id="voice">
-          <option value="ErXwobaYiN019PkySvjV">Antoni (ES)</option>
-          <option value="pNInz6obpgDQGcFmaJgB">Paula (ES)</option>
-          <option value="21m00Tcm4TlvDq8ikWAM">Rachel (EN)</option>
-        </select>
-      </div>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:160px;">
+            <label for="voice">Voz (ElevenLabs)</label>
+            <select id="voice">
+              <option value="ErXwobaYiN019PkySvjV">Antoni (ES)</option>
+              <option value="pNInz6obpgDQGcFmaJgB">Paula (ES)</option>
+              <option value="21m00Tcm4TlvDq8ikWAM">Rachel (EN)</option>
+            </select>
+          </div>
 
-      <div style="width:120px;">
-        <label for="format">Formato</label>
-        <select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select>
-      </div>
+          <!-- Formato fijo a MP3 -->
+          <div style="width:120px;">
+            <label for="format">Formato</label>
+            <select id="format" disabled><option value="mp3">MP3</option></select>
+          </div>
 
-      <div style="width:120px;">
-        <label for="lang">Idioma (preview)</label>
-        <select id="lang"><option value="es-ES">Español (ES)</option><option value="es-MX">Español (MX)</option><option value="en-US">English (US)</option></select>
-      </div>
+          <div style="width:120px;">
+            <label for="lang">Idioma (preview)</label>
+            <select id="lang"><option value="es-ES">Español (ES)</option><option value="es-MX">Español (MX)</option><option value="en-US">English (US)</option></select>
+          </div>
+        </div>
+
+        <div class="row controls" style="margin-top:12px;">
+          <button class="btn" id="genBtn">Generar & Descargar</button>
+          <button class="btn ghost" id="clearBtn">Limpiar</button>
+          <div style="margin-left:auto;min-width:220px;text-align:right">
+            <div class="small">Lista local — archivos generados</div>
+          </div>
+        </div>
+
+        <div id="status" class="note" style="margin-top:10px"></div>
+
+        <!-- audio central -->
+        <audio id="audio" controls style="display:none"></audio>
+
+        <section style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Archivos generados</h3>
+          <div class="list" id="filesList">
+            <!-- items appended aquí -->
+          </div>
+        </section>
+
+        <section style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Grabación (micrófono)</h3>
+          <div class="row">
+            <button class="btn ghost" id="recStart">🎙️ Iniciar</button>
+            <button class="btn ghost" id="recStop" disabled>⏹ Detener</button>
+            <div style="margin-left:auto" class="small" id="recStatus"></div>
+          </div>
+          <div class="note">La grabación se convertirá a WAV y se añadirá a la lista de archivos generados. (Descarga disponible en la lista.)</div>
+        </section>
+
+        <section style="margin-top:12px">
+          <label class="note">(Opcional) Selecciona un archivo local para renombrar / preparar para el dispositivo</label>
+          <input id="fileInput" type="file" accept="audio/*" />
+          <div class="row" style="margin-top:8px">
+            <button class="btn ghost" id="prepareLocal">Preparar (renombrar)</button>
+            <input id="prefix" type="text" placeholder="0001" style="width:120px;margin-left:8px;border-radius:8px;padding:8px"/>
+          </div>
+          <div id="fileInfo" class="note"></div>
+        </section>
+      </main>
+
+      <!-- ASIDE -->
+      <aside class="card">
+        <h3 style="margin-top:0">Cómo copiar los audios al dispositivo</h3>
+        <ol class="note">
+          <li>Conecta el dispositivo a la PC mediante USB o usa un lector de tarjetas.</li>
+          <li>Enciende el dispositivo (si aplica) y abre el Explorador/Finder.</li>
+          <li>Copia los archivos MP3 generados a la carpeta raíz del dispositivo.</li>
+          <li>Usa nombres sencillos con prefijo numérico (ej. <code>0001.mp3</code>, <code>0002.mp3</code>).</li>
+          <li>Expulsa el dispositivo de forma segura y prueba la reproducción.</li>
+        </ol>
+
+        <div style="margin-top:12px">
+          <div class="note"><strong>Nota:</strong> Para que la generación de MP3 funcione desde TTS en el navegador necesitas configurar la variable <code>API_KEY</code> dentro de este archivo (uso local). Si no la configuras se usará la voz del navegador solo para previsualizar.</div>
+        </div>
+
+        <hr style="border-color:rgba(255,255,255,0.03);margin:12px 0">
+
+        <div style="color:var(--muted);font-size:13px">Made with ❤️ for TalkBud — Demo escolar</div>
+      </aside>
     </div>
 
-    <div class="row controls" style="margin-top:12px;">
-      <button class="btn" id="genBtn">Generar & Descargar</button>
-      <button class="btn ghost" id="clearBtn">Limpiar</button>
-      <div style="margin-left:auto;min-width:220px;text-align:right">
-        <div class="small">Lista local — archivos generados</div>
-      </div>
-    </div>
-
-    <div id="status" class="note" style="margin-top:10px"></div>
-
-    <!-- audio central -->
-    <audio id="audio" controls style="display:none"></audio>
-
-    <section style="margin-top:12px">
-      <h3 style="margin:0 0 8px 0">Archivos generados</h3>
-      <div class="list" id="filesList">
-        <!-- items appended aquí -->
-      </div>
-    </section>
-
-    <section style="margin-top:12px">
-      <h3 style="margin:0 0 8px 0">Grabación (micrófono)</h3>
-      <div class="row">
-        <button class="btn ghost" id="recStart">🎙️ Iniciar</button>
-        <button class="btn ghost" id="recStop" disabled>⏹ Detener</button>
-        <div style="margin-left:auto" class="small" id="recStatus"></div>
-      </div>
-      <div class="note">La grabación se convertirá a WAV y se añadirá a la lista de archivos generados.</div>
-    </section>
-
-    <section style="margin-top:12px">
-      <label class="note">(Opcional) Selecciona un archivo local para renombrar / preparar para el dispositivo</label>
-      <input id="fileInput" type="file" accept="audio/*" />
-      <div class="row" style="margin-top:8px">
-        <button class="btn ghost" id="prepareLocal">Preparar (renombrar)</button>
-        <input id="prefix" type="text" placeholder="0001" style="width:120px;margin-left:8px;border-radius:8px;padding:8px"/>
-      </div>
-      <div id="fileInfo" class="note"></div>
-    </section>
-  </main>
-
-  <!-- ASIDE -->
-  <aside class="card">
-    <h3 style="margin-top:0">Cómo copiar los audios al dispositivo</h3>
-    <ol class="note">
-      <li>Conecta el dispositivo a la PC mediante USB o saca la microSD y usa un lector.</li>
-      <li>Enciende el dispositivo (si aplica) y abre el Explorador/Finder.</li>
-      <li>Copia los archivos MP3/WAV generados a la carpeta raíz de la tarjeta/dispositivo.</li>
-      <li>Usa nombres sencillos con prefijo numérico (ej. <code>0001.mp3</code>, <code>0002.mp3</code>).</li>
-      <li>Expulsa la tarjeta de forma segura y prueba la reproducción en el dispositivo.</li>
-    </ol>
-
-    <h4 style="margin-top:12px">Subida por red (opcional)</h4>
-    <label class="small">IP del dispositivo (si acepta uploads)</label>
-    <input id="espIp" type="text" placeholder="192.168.4.1" />
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn" id="uploadBtn">Subir al dispositivo</button>
-      <button class="btn ghost" id="refreshList">Refrescar lista</button>
-    </div>
-
-    <div style="margin-top:12px">
-      <div class="note"><strong>Nota:</strong> Para que la generación de MP3 funcione desde TTS en el navegador necesitas configurar la variable <code>API_KEY</code> dentro de este archivo (uso local). Si no la configuras se usará la voz del navegador solo para previsualizar.</div>
-    </div>
-
-    <hr style="border-color:rgba(255,255,255,0.03);margin:12px 0">
-
-    <div style="color:var(--muted);font-size:13px">Made with ❤️ for TalkBud — Demo escolar</div>
-  </aside>
-</div>
-
-<footer>© TalkBud 2025 — Proyecto escolar</footer>
-```
-
+    <footer>© TalkBud 2025 — Proyecto escolar</footer>
   </div>
 
 <script>
@@ -163,7 +149,7 @@ footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
     pega tu clave en API_KEY abajo en tu copia local del archivo.
   - NO subas tu copia con la API_KEY a repositorios públicos.
 */
-const API_KEY = ''; // <-- Pega tu ElevenLabs xi-api-key aquí para que "Generar & Descargar" cree MP3 desde TTS
+const API_KEY = 'sk_4b73ad1a885705239a55630fc4535eb34bafff1f1838a008'; // <-- Pega tu ElevenLabs xi-api-key aquí para que "Generar & Descargar" cree MP3 desde TTS
 
 function elevenEndpoint(voiceId){ return `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`; }
 function setStatus(txt, err=false){ const s=document.getElementById('status'); s.textContent=txt; s.style.color = err ? '#ffb4b4' : '#bfefff'; }
@@ -213,14 +199,13 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
   const text = document.getElementById('text').value.trim();
   if(!text){ alert('Escribe una frase'); return; }
   const voiceId = document.getElementById('voice').value;
-  const format = document.getElementById('format').value;
 
   if(API_KEY && API_KEY.length>0){
-    // call ElevenLabs
+    // call ElevenLabs, force MP3
     try{
       setStatus('Generando audio (ElevenLabs)...');
       document.getElementById('genBtn').disabled = true;
-      const acceptType = format === 'wav' ? 'audio/wav' : 'audio/mpeg';
+      const acceptType = 'audio/mpeg';
       const res = await fetch(elevenEndpoint(voiceId), {
         method: 'POST',
         headers: {
@@ -233,7 +218,7 @@ document.getElementById('genBtn').addEventListener('click', async ()=>{
       if(!res.ok){ const txt = await res.text(); throw new Error(txt || ('HTTP ' + res.status)); }
       const blob = await res.blob();
       if(!blob.type.startsWith('audio')) throw new Error('Respuesta no es audio: '+blob.type);
-      const ext = format==='wav' ? 'wav' : 'mp3';
+      const ext = 'mp3';
       const filename = makeFilename(ext);
       addFileItem(filename, blob);
       // auto-select for upload input (optional)
@@ -351,30 +336,7 @@ document.getElementById('prepareLocal').addEventListener('click', ()=>{
   document.getElementById('fileInfo').innerHTML = `<div class="small">Archivo listo: <strong>${filename}</strong>. Copia al dispositivo.</div>`;
 });
 
-// --- Upload to device by IP (optional) ---
-document.getElementById('uploadBtn').addEventListener('click', async ()=>{
-  const ip = document.getElementById('espIp').value.trim();
-  if(!ip){ alert('Introduce la IP del dispositivo (ej. 192.168.4.1)'); return; }
-  // pick first generated file or file input
-  let fileToSend = null;
-  if(document.getElementById('fileInput').files && document.getElementById('fileInput').files.length>0) fileToSend = document.getElementById('fileInput').files[0];
-  else if(generatedFiles.length>0) fileToSend = generatedFiles[0].blob ? new File([generatedFiles[0].blob], generatedFiles[0].name, {type: generatedFiles[0].blob.type}) : null;
-  if(!fileToSend){ alert('No hay archivo para subir. Genera o selecciona uno.'); return; }
-  setStatus('Subiendo a dispositivo ' + ip + ' ...');
-  try{
-    const form = new FormData(); form.append('audio', fileToSend);
-    const res = await fetch(`http://${ip}/upload`, { method:'POST', body: form });
-    if(!res.ok) throw new Error('Upload falló: '+res.statusText);
-    setStatus('Subida exitosa');
-    alert('Subida completada (si el dispositivo soporta /upload).');
-  }catch(err){ console.error(err); setStatus('Error al subir: '+(err.message||err), true); alert('Error al subir. Verifica IP y que el dispositivo acepte uploads.'); }
-});
-
-// refresh list button: clear UI list and re-add from memory
-document.getElementById('refreshList').addEventListener('click', ()=>{
-  filesListEl.innerHTML=''; generatedFiles.forEach(f=>addFileItem(f.name,f.blob));
-  setStatus('Lista local actualizada');
-});
+// refresh list button removed (no network/upload features)
 
 </script>
 
