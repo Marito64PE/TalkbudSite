@@ -1,56 +1,262 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TalkBud TTS</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TalkBud — Web TTS Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#7dd3fc;--accent-2:#60a5fa}
+    *{box-sizing:border-box;font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071023 0%, #071627 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .container{width:100%;max-width:980px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#022;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;box-shadow:0 4px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+
+    textarea{width:100%;min-height:140px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:inherit;outline:none}
+    .row{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:#022;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--accent)}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    select,input[type=text]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+    .controls{display:flex;gap:10px;margin-top:10px;align-items:center}
+    .small{font-size:12px;color:var(--muted)}
+    .list{max-height:360px;overflow:auto;margin-top:10px;padding-right:6px}
+    .item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02)}
+    .meta{display:flex;gap:10px;align-items:center}
+    .filename{font-weight:600}
+    .actions{display:flex;gap:8px}
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
+
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
+  </style>
 </head>
 <body>
-  <h2>Convertir texto a voz - TalkBud</h2>
-  <textarea id="text" rows="5" cols="50" placeholder="Escribe tu texto aquí..."></textarea><br>
-  <button onclick="speak()">Convertir</button>
-  <br><br>
-  <audio id="audio" controls></audio>
-  <a id="downloadLink" download="talkbud_audio.mp3" style="display:none;">Descargar audio</a>
+  <div class="container">
+    <header>
+      <div class="logo">TB</div>
+      <div>
+        <h1>TalkBud — Audio Manager</h1>
+        <p class="lead">Create, preview and upload personalized phrases for TalkBud devices. Secure by design — keep your API key private.</p>
+      </div>
+    </header>
 
-  <script>
-    async function speak() {
-      const text = document.getElementById("text").value;
-      const voiceId = "pNInz6obpgDQGcFmaJgB"; // Spanish Female Voice (Antonio / Paula)
-      const apiKey = "sk_4b73ad1a885705239a55630fc4535eb34bafff1f1838a008";
+    <div class="grid">
+      <main class="card">
+        <label for="text">Type a phrase (Spanish/English supported)</label>
+        <textarea id="text" placeholder="Hello! Press the button to speak...">Hola, ¿puedes ayudarme por favor?</textarea>
 
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: "POST",
-        headers: {
-          "Accept": "audio/mpeg",
-          "Content-Type": "application/json",
-          "xi-api-key": apiKey
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:160px;">
+            <label for="voice">Voice</label>
+            <select id="voice">
+              <option value="ErXwobaYiN019PkySvjV">Antoni (ES)</option>
+              <option value="21m00Tcm4TlvDq8ikWAM">Rachel (EN)</option>
+              <option value="pNInz6obpgDQGcFmaJgB">Paula (ES)</option>
+            </select>
+          </div>
+          <div style="width:120px;">
+            <label for="format">Format</label>
+            <select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select>
+          </div>
+          <div style="width:120px;">
+            <label for="lang">Language</label>
+            <select id="lang"><option value="es">Spanish</option><option value="en">English</option></select>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="generate">Generate TTS</button>
+          <button class="btn ghost" id="clear">Clear</button>
+          <div style="margin-left:auto">
+            <label class="small">API Key (will be stored locally)</label>
+            <input type="text" id="apiKey" placeholder="Paste ElevenLabs API key here" autocomplete="off" style="width:260px"/>
+          </div>
+        </div>
+
+        <div class="note">Tip: For production use a server-side proxy to keep the key secret. This demo stores the key in localStorage for convenience.</div>
+
+        <div class="note" id="status" style="margin-top:8px"></div>
+
+        <!-- central audio element used for playback; created in DOM so script can reference it reliably -->
+        <audio id="audio" controls style="width:100%;margin-top:12px;display:block"></audio>
+
+        <section style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Generated files</h3>
+          <div class="list" id="filesList">
+            <!-- items appended here -->
+          </div>
+        </section>
+
+      </main>
+
+      <aside class="card">
+        <h3 style="margin-top:0">Upload / Device</h3>
+        <label for="espIp">TalkBud device IP</label>
+        <input type="text" id="espIp" placeholder="192.168.4.1" />
+
+        <div style="margin-top:10px">
+          <label class="small">Select file to upload to device (after generating)</label>
+          <input type="file" id="fileInput" />
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" id="uploadBtn">Upload to Device</button>
+            <button class="btn ghost" id="refreshList">Refresh Local List</button>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <h4 style="margin:0 0 6px 0">Local instructions</h4>
+          <ol style="padding-left:16px;color:var(--muted)">
+            <li>Paste API key above (saved to localStorage).</li>
+            <li>Type phrase → Generate → Preview/Download.</li>
+            <li>To upload to device, set device IP and click Upload.</li>
+          </ol>
+        </div>
+
+        <div style="margin-top:12px">
+          <small class="small">Security note: Never hardcode your API key in public repos. Use a backend proxy for production.</small>
+        </div>
+      </aside>
+    </div>
+
+    <footer>Made with ❤️ for TalkBud — Export audio files and manage phrases for your device.</footer>
+  </div>
+
+<script>
+(async()=>{
+  const apiInput = document.getElementById('apiKey');
+  const savedKey = localStorage.getItem('talkbud_api_key');
+  if(savedKey) apiInput.value = savedKey;
+  apiInput.addEventListener('change',()=>{
+    localStorage.setItem('talkbud_api_key', apiInput.value.trim());
+  });
+
+  const textEl = document.getElementById('text');
+  const generateBtn = document.getElementById('generate');
+  const filesList = document.getElementById('filesList');
+  const status = document.getElementById('status');
+  const formatEl = document.getElementById('format');
+  const voiceEl = document.getElementById('voice');
+  const espIpEl = document.getElementById('espIp');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('fileInput');
+  const clearBtn = document.getElementById('clear');
+
+  // central audio element (exists in the DOM) — fallback ensure
+  function getAudioEl(){
+    let a = document.getElementById('audio');
+    if(!a){
+      a = document.createElement('audio');
+      a.id = 'audio';
+      a.controls = true;
+      a.style.width = '100%';
+      a.style.marginTop = '12px';
+      document.querySelector('main.card').appendChild(a);
+    }
+    return a;
+  }
+
+  function setStatus(msg,err=false){status.textContent = msg; status.style.color = err? '#ffb4b4':'#bfefff'}
+
+  function makeFilename(){
+    const t = new Date();
+    return `talkbud_${t.getFullYear()}${('0'+(t.getMonth()+1)).slice(-2)}${('0'+t.getDate()).slice(-2)}_${('0'+t.getHours()).slice(-2)}${('0'+t.getMinutes()).slice(-2)}.mp3`;
+  }
+
+  function addFileItem(name,blob){
+    const el = document.createElement('div'); el.className='item';
+    const meta = document.createElement('div'); meta.className='meta';
+    const fn = document.createElement('div'); fn.className='filename'; fn.textContent = name;
+    meta.appendChild(fn);
+    const actions = document.createElement('div'); actions.className='actions';
+    const play = document.createElement('button'); play.className='btn ghost'; play.textContent='Play';
+    const down = document.createElement('button'); down.className='btn'; down.textContent='Download';
+    const del = document.createElement('button'); del.className='btn ghost'; del.textContent='Delete';
+
+    play.onclick = ()=>{
+      try{
+        const url = URL.createObjectURL(blob);
+        const audioEl = getAudioEl();
+        audioEl.src = url;
+        audioEl.play().catch(e=>console.warn('Play prevented:',e));
+      }catch(e){console.error('Play error',e); setStatus('Unable to play audio', true);}    
+    }
+
+    down.onclick = ()=>{ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; a.click(); }
+    del.onclick = ()=>{ filesList.removeChild(el); setStatus('Deleted local file'); }
+
+    actions.appendChild(play); actions.appendChild(down); actions.appendChild(del);
+    el.appendChild(meta); el.appendChild(actions);
+    filesList.prepend(el);
+  }
+
+  generateBtn.addEventListener('click', async ()=>{
+    const apiKey = document.getElementById('apiKey').value.trim();
+    if(!apiKey){ alert('Please paste your ElevenLabs API key in the box on the right.'); return; }
+    const text = textEl.value.trim(); if(!text){ alert('Please write some text.'); return; }
+    generateBtn.disabled = true; setStatus('Generating audio...');
+
+    try{
+      const voiceId = voiceEl.value;
+      const model = 'eleven_multilingual_v2';
+      const format = formatEl.value === 'wav' ? 'wav' : 'mp3';
+      const acceptType = format === 'wav' ? 'audio/wav' : 'audio/mpeg';
+
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,{
+        method:'POST',
+        headers:{
+          'Accept': acceptType,
+          'Content-Type':'application/json',
+          'xi-api-key': apiKey
         },
-        body: JSON.stringify({
-          text: text,
-          model_id: "eleven_monolingual_v1", // Puedes cambiar a multilingual si lo necesitas
-          voice_settings: {
-            stability: 0.4,
-            similarity_boost: 0.75
-          }
-        })
+        body: JSON.stringify({ text, model_id: model, voice_settings:{stability:0.5,similarity_boost:0.75} })
       });
 
-      if (!response.ok) {
-        alert("Error al generar el audio. Verifica tu API Key o el texto.");
-        return;
-      }
+      if(!res.ok){ const txt = await res.text(); throw new Error('TTS error: '+txt); }
+      const blob = await res.blob();
+      const name = makeFilename();
+      addFileItem(name,blob);
+      setStatus('Audio generated — you can play, download or upload it.');
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+      // auto-select for upload
+      const file = new File([blob], name, {type: blob.type});
+      fileInput.files = createFileList(file);
 
-      const audio = document.getElementById("audio");
-      audio.src = url;
+    }catch(err){ console.error(err); setStatus('Failed to generate audio: '+err.message, true); }
+    generateBtn.disabled = false;
+  });
 
-      const downloadLink = document.getElementById("downloadLink");
-      downloadLink.href = url;
-      downloadLink.style.display = "inline";
-    }
-  </script>
+  function createFileList(file){
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+  }
+
+  uploadBtn.addEventListener('click', async ()=>{
+    const files = fileInput.files; if(!files || files.length===0){ alert('Select or generate a file first.'); return; }
+    const ip = espIpEl.value.trim(); if(!ip){ alert('Enter your device IP (e.g. 192.168.4.1)'); return; }
+    setStatus('Uploading to device...'); uploadBtn.disabled = true;
+
+    try{
+      const form = new FormData(); form.append('audio', files[0]);
+      const res = await fetch(`http://${ip}/upload`, { method:'POST', body: form });
+      if(!res.ok) throw new Error('Upload failed: '+res.statusText);
+      setStatus('Upload successful');
+    }catch(err){ console.error(err); setStatus('Upload error: '+err.message, true); }
+    uploadBtn.disabled = false;
+  });
+
+  clearBtn.addEventListener('click', ()=>{ textEl.value=''; setStatus('Cleared'); });
+
+})();
+</script>
 </body>
 </html>
-
