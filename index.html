@@ -1,148 +1,473 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBud Demo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f8f9fa;
-            color: #333;
-            text-align: center;
-        }
-        header {
-            background: #4CAF50;
-            color: white;
-            padding: 20px;
-            font-size: 1.8em;
-        }
-        main {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1em;
-            cursor: pointer;
-            border-radius: 6px;
-        }
-        button:disabled {
-            background: gray;
-            cursor: not-allowed;
-        }
-        audio {
-            margin-top: 10px;
-        }
-        .modes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-        .mode {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            width: 250px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TalkBud — Gestor de Audio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#7dd3fc;--accent-2:#60a5fa}
+    *{box-sizing:border-box;font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071023 0%, #071627 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .container{width:100%;max-width:980px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#022;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;box-shadow:0 4px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+
+    textarea{width:100%;min-height:140px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:inherit;outline:none}
+    .row{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:#022;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--accent)}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    select,input[type=text]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+    .controls{display:flex;gap:10px;margin-top:10px;align-items:center}
+    .small{font-size:12px;color:var(--muted)}
+    .list{max-height:360px;overflow:auto;margin-top:10px;padding-right:6px}
+    .item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02)}
+    .meta{display:flex;gap:10px;align-items:center}
+    .filename{font-weight:600}
+    .actions{display:flex;gap:8px}
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
+
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <div class="logo">TB</div>
+      <div>
+        <h1>TalkBud — Gestor de audio</h1>
+        <p class="lead">Genera, reproduce y descarga audios personalizados para tu dispositivo TalkBud.</p>
+      </div>
+    </header>
 
-    <header>🎤 TalkBud Demo</header>
+    <div class="grid">
+      <main class="card">
+        <label for="text">Escribe una frase (español/inglés)</label>
+        <textarea id="text" placeholder="Escribe aquí...">Hola, ¿puedes ayudarme por favor?</textarea>
 
-    <main>
-        <div class="card">
-            <h2>Graba tu audio</h2>
-            <p>Pulsa para grabar un mensaje y luego descárgalo para usarlo en tu dispositivo.</p>
-            <button id="startBtn">🎙️ Iniciar grabación</button>
-            <button id="stopBtn" disabled>⏹️ Detener grabación</button>
-            <br>
-            <audio id="audioPlayback" controls></audio>
-            <br>
-            <a id="downloadLink" style="display:none;">⬇️ Descargar audio</a>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:160px;">
+            <label for="voice">Voz</label>
+            <select id="voice">
+              <option value="ErXwobaYiN019PkySvjV">Antoni (ES)</option>
+              <option value="21m00Tcm4TlvDq8ikWAM">Rachel (EN)</option>
+              <option value="pNInz6obpgDQGcFmaJgB">Paula (ES)</option>
+            </select>
+          </div>
+          <div style="width:120px;">
+            <label for="format">Formato</label>
+            <select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select>
+          </div>
+          <div style="width:120px;">
+            <label for="lang">Idioma</label>
+            <select id="lang"><option value="es">Español</option><option value="en">Inglés</option></select>
+          </div>
         </div>
 
-        <div class="card">
-            <h2>Cómo subir el audio al dispositivo</h2>
-            <ol style="text-align: left;">
-                <li>Conecta el dispositivo a tu computadora usando un cable USB.</li>
-                <li>Enciéndelo y espera que aparezca como carpeta en el explorador de archivos.</li>
-                <li>Arrastra y suelta el audio descargado dentro de esa carpeta.</li>
-                <li>Puedes subir varios audios, incluso grabaciones propias.</li>
-                <li>Desconecta el dispositivo y ¡listo!</li>
-            </ol>
+        <div class="controls">
+          <button class="btn" id="generate">Generar TTS</button>
+          <button class="btn ghost" id="clear">Limpiar</button>
+          <div style="margin-left:auto">
+            <label class="small">API Key (solo demo local)</label>
+            <input type="text" id="apiKey" placeholder="Pega aquí tu API key de ElevenLabs" autocomplete="off" style="width:260px"/>
+          </div>
         </div>
 
-        <div class="card">
-            <h2>Modos de reproducción</h2>
-            <div class="modes">
-                <div class="mode">
-                    <h3>Modo 1</h3>
-                    <p>Reproduce un audio por vez y se detiene.</p>
-                </div>
-                <div class="mode">
-                    <h3>Modo 2</h3>
-                    <p>Reproduce todos los audios en orden alfabético y luego se detiene.</p>
-                </div>
-                <div class="mode">
-                    <h3>Modo 3</h3>
-                    <p>Reproduce todos los audios sin parar en bucle.</p>
-                </div>
-            </div>
+        <div class="note">Nota: Para proyectos reales use un backend para ocultar la API key. Esta demo guarda la clave en localStorage por conveniencia escolar.</div>
+
+        <div class="note" id="status" style="margin-top:8px"></div>
+
+        <!-- audio central para reproducción -->
+        <audio id="audio" controls style="width:100%;margin-top:12px;display:block"></audio>
+
+        <section style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Audios generados</h3>
+          <div class="list" id="filesList">
+            <!-- items appended here -->
+          </div>
+        </section>
+
+        <section style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Grabación</h3>
+          <div class="row">
+            <button class="btn ghost" id="recStart">🎙️ Iniciar grabación</button>
+            <button class="btn ghost" id="recStop" disabled>⏹️ Detener</button>
+            <div style="margin-left:auto" class="small" id="recStatus"></div>
+          </div>
+          <div class="note">La grabación se convertirá a WAV (calidad sin pérdidas) y se añadirá a la lista de audios generados.</div>
+        </section>
+
+      </main>
+
+      <aside class="card">
+        <h3 style="margin-top:0">Dispositivo / Subida (opcional)</h3>
+        <label for="espIp">IP del dispositivo (opcional)</label>
+        <input type="text" id="espIp" placeholder="192.168.4.1" />
+
+        <div style="margin-top:10px">
+          <label class="small">Selecciona archivo para subir (después de generar)</label>
+          <input type="file" id="fileInput" />
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" id="uploadBtn">Subir al dispositivo</button>
+            <button class="btn ghost" id="refreshList">Refrescar lista</button>
+          </div>
         </div>
-    </main>
 
-    <script>
-        let mediaRecorder;
-        let audioChunks = [];
+        <div style="margin-top:14px">
+          <h4 style="margin:0 0 6px 0">Instrucciones rápidas</h4>
+          <ol style="padding-left:16px;color:var(--muted)">
+            <li>Pega tu API key arriba (solo si usas esta demo localmente).</li>
+            <li>Escribe → Genera → Previsualiza → Descarga.</li>
+            <li>Para cargar al dispositivo: usa la función de subida si tu dispositivo acepta carga por IP, o copia el archivo descargado desde el explorador de archivos.</li>
+          </ol>
+        </div>
 
-        document.getElementById('startBtn').addEventListener('click', async () => {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
+        <div style="margin-top:12px">
+          <small class="small">Seguridad: No publiques tu API key. En producción usa un proxy server-side.</small>
+        </div>
 
-            mediaRecorder.ondataavailable = event => {
-                if (event.data.size > 0) audioChunks.push(event.data);
-            };
+        <hr style="border-color:rgba(255,255,255,0.03);margin:12px 0">
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(audioChunks, { type: 'audio/wav' });
-                const url = URL.createObjectURL(blob);
-                const audio = document.getElementById('audioPlayback');
-                const downloadLink = document.getElementById('downloadLink');
+        <div>
+          <h4 style="margin:0 0 6px 0">Modos de reproducción</h4>
+          <ul style="padding-left:16px;color:var(--muted)">
+            <li><b>Modo 1</b>: Reproduce un audio y se detiene.</li>
+            <li><b>Modo 2</b>: Reproduce todos los audios por orden alfabético y se detiene.</li>
+            <li><b>Modo 3</b>: Reproduce todos los audios en bucle continuo.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
 
-                audio.src = url;
-                downloadLink.href = url;
-                downloadLink.download = 'talkbud_audio.wav';
-                downloadLink.style.display = 'inline-block';
-                downloadLink.textContent = '⬇️ Descargar audio';
-            };
+    <footer>Hecho con ❤️ para TalkBud — Demo escolar</footer>
+  </div>
 
-            mediaRecorder.start();
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('stopBtn').disabled = false;
-        });
+<script>
+(async()=>{
+  // Elements
+  const apiInput = document.getElementById('apiKey');
+  const savedKey = localStorage.getItem('talkbud_api_key');
+  if(savedKey) apiInput.value = savedKey;
+  apiInput.addEventListener('change', ()=> {
+    localStorage.setItem('talkbud_api_key', apiInput.value.trim());
+  });
 
-        document.getElementById('stopBtn').addEventListener('click', () => {
-            mediaRecorder.stop();
-            document.getElementById('startBtn').disabled = false;
-            document.getElementById('stopBtn').disabled = true;
-        });
-    </script>
+  const textEl = document.getElementById('text');
+  const generateBtn = document.getElementById('generate');
+  const clearBtn = document.getElementById('clear');
+  const filesList = document.getElementById('filesList');
+  const status = document.getElementById('status');
+  const formatEl = document.getElementById('format');
+  const voiceEl = document.getElementById('voice');
+  const espIpEl = document.getElementById('espIp');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('fileInput');
+  const recStart = document.getElementById('recStart');
+  const recStop = document.getElementById('recStop');
+  const recStatus = document.getElementById('recStatus');
 
+  function setStatus(msg, err=false){ status.textContent = msg; status.style.color = err ? '#ffb4b4' : '#bfefff' }
+
+  // Audio element (fallback create if missing)
+  function getAudioEl(){
+    let a = document.getElementById('audio');
+    if(!a){
+      a = document.createElement('audio');
+      a.id = 'audio';
+      a.controls = true;
+      a.style.width = '100%';
+      document.querySelector('main.card').appendChild(a);
+    }
+    return a;
+  }
+
+  function makeFilename(ext = 'mp3'){
+    const t = new Date();
+    const y = t.getFullYear();
+    const m = ('0'+(t.getMonth()+1)).slice(-2);
+    const d = ('0'+t.getDate()).slice(-2);
+    const hh = ('0'+t.getHours()).slice(-2);
+    const mm = ('0'+t.getMinutes()).slice(-2);
+    return `talkbud_${y}${m}${d}_${hh}${mm}.${ext}`;
+  }
+
+  function addFileItem(name, blob){
+    const el = document.createElement('div'); el.className='item';
+    const meta = document.createElement('div'); meta.className='meta';
+    const fn = document.createElement('div'); fn.className='filename'; fn.textContent = name;
+    meta.appendChild(fn);
+
+    const actions = document.createElement('div'); actions.className='actions';
+    const play = document.createElement('button'); play.className='btn ghost'; play.textContent='Play';
+    const down = document.createElement('button'); down.className='btn'; down.textContent='Download';
+    const del = document.createElement('button'); del.className='btn ghost'; del.textContent='Delete';
+
+    play.onclick = ()=>{
+      try {
+        const url = URL.createObjectURL(blob);
+        const audioEl = getAudioEl();
+        audioEl.src = url;
+        audioEl.play().catch(e=>console.warn('Play prevented', e));
+      } catch(e) { console.error(e); setStatus('No se pudo reproducir', true); }
+    };
+
+    down.onclick = ()=>{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    };
+
+    del.onclick = ()=>{
+      filesList.removeChild(el);
+      setStatus('Archivo eliminado');
+    };
+
+    actions.appendChild(play); actions.appendChild(down); actions.appendChild(del);
+    el.appendChild(meta); el.appendChild(actions);
+    filesList.prepend(el);
+  }
+
+  function createFileList(file){
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    return dt.files;
+  }
+
+  // --- TTS generation (ElevenLabs) ---
+  generateBtn.addEventListener('click', async ()=>{
+    const apiKey = apiInput.value.trim();
+    if(!apiKey){ alert('Pega tu API key (panel derecho).'); return; }
+    const text = textEl.value.trim();
+    if(!text){ alert('Escribe una frase.'); return; }
+    generateBtn.disabled = true; setStatus('Generando audio...');
+
+    try{
+      const voiceId = voiceEl.value;
+      const model = 'eleven_multilingual_v2';
+      const format = formatEl.value === 'wav' ? 'wav' : 'mp3';
+      const acceptType = format === 'wav' ? 'audio/wav' : 'audio/mpeg';
+
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': acceptType,
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text,
+          model_id: model,
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        })
+      });
+
+      if(!res.ok){
+        const txt = await res.text();
+        throw new Error(txt || 'Error en TTS');
+      }
+
+      const blob = await res.blob();
+      const ext = format === 'wav' ? 'wav' : 'mp3';
+      const name = makeFilename(ext);
+      addFileItem(name, blob);
+      setStatus('Audio generado — puedes reproducirlo o descargarlo.');
+
+      // auto-select for upload
+      const f = new File([blob], name, { type: blob.type });
+      fileInput.files = createFileList(f);
+
+    }catch(err){
+      console.error(err);
+      setStatus('Fallo al generar audio: ' + (err.message || err), true);
+      alert('Error generando audio. Revisa la consola para más detalles.');
+    } finally {
+      generateBtn.disabled = false;
+    }
+  });
+
+  clearBtn.addEventListener('click', ()=>{ textEl.value = ''; setStatus('Limpiado'); });
+
+  // --- Upload to device (optional) ---
+  uploadBtn.addEventListener('click', async ()=>{
+    const files = fileInput.files;
+    if(!files || files.length === 0){ alert('Selecciona o genera un archivo primero.'); return; }
+    const ip = espIpEl.value.trim();
+    if(!ip){ alert('Introduce la IP del dispositivo (si lo soporta).'); return; }
+    uploadBtn.disabled = true; setStatus('Subiendo al dispositivo...');
+
+    try {
+      const form = new FormData();
+      form.append('audio', files[0]);
+      const res = await fetch(`http://${ip}/upload`, { method:'POST', body: form });
+      if(!res.ok) throw new Error('Upload falló: ' + res.statusText);
+      setStatus('Subida exitosa');
+    } catch(err) {
+      console.error(err);
+      setStatus('Error al subir: ' + (err.message||err), true);
+      alert('No se pudo subir al dispositivo. Verifica IP y que acepte uploads.');
+    } finally {
+      uploadBtn.disabled = false;
+    }
+  });
+
+  // --- Recording (MediaRecorder -> WAV) ---
+  let mediaRecorder = null;
+  let chunks = [];
+
+  recStart.addEventListener('click', async ()=>{
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      chunks = [];
+
+      mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+
+      mediaRecorder.onstop = async ()=>{
+        setStatus('Procesando grabación...');
+        recStatus.textContent = '';
+        const blob = new Blob(chunks, { type: chunks[0].type || 'audio/webm' });
+        // Convert to WAV using AudioContext for compatibility
+        try {
+          const arrayBuffer = await blob.arrayBuffer();
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const decoded = await audioCtx.decodeAudioData(arrayBuffer);
+          const wavBlob = audioBufferToWavBlob(decoded);
+          const name = makeFilename('wav');
+          addFileItem(name, wavBlob);
+          setStatus('Grabación lista y añadida a la lista de audios.');
+          // auto-set fileInput
+          fileInput.files = createFileList(new File([wavBlob], name, { type: wavBlob.type }));
+        } catch (err) {
+          console.error('Error convirtiendo a WAV', err);
+          // fallback: use original blob
+          const name = makeFilename('webm');
+          addFileItem(name, blob);
+          fileInput.files = createFileList(new File([blob], name, { type: blob.type }));
+          setStatus('Grabación añadida (formato webm).', false);
+        }
+      };
+
+      mediaRecorder.start();
+      recStart.disabled = true; recStop.disabled = false;
+      recStatus.textContent = 'Grabando...';
+      setStatus('Grabando audio...');
+    } catch (err) {
+      console.error(err);
+      setStatus('No se pudo acceder al micrófono', true);
+      alert('No se pudo acceder al micrófono. Revisa permisos del navegador.');
+    }
+  });
+
+  recStop.addEventListener('click', ()=>{
+    if(mediaRecorder && mediaRecorder.state !== 'inactive'){
+      mediaRecorder.stop();
+      recStart.disabled = false; recStop.disabled = true;
+    }
+  });
+
+  // WAV encoder
+  function audioBufferToWavBlob(buffer, opt) {
+    opt = opt || {}
+    var numChannels = buffer.numberOfChannels
+    var sampleRate = buffer.sampleRate
+    var format = opt.float32 ? 3 : 1
+    var bitDepth = format === 3 ? 32 : 16
+
+    var result
+    if (numChannels === 2) {
+      result = interleave(buffer.getChannelData(0), buffer.getChannelData(1))
+    } else {
+      result = buffer.getChannelData(0)
+    }
+
+    return encodeWAV(result, numChannels, sampleRate, format, bitDepth)
+  }
+
+  function interleave(inputL, inputR) {
+    var length = inputL.length + inputR.length
+    var result = new Float32Array(length)
+
+    var index = 0
+    var inputIndex = 0
+
+    while (index < length) {
+      result[index++] = inputL[inputIndex]
+      result[index++] = inputR[inputIndex]
+      inputIndex++
+    }
+    return result
+  }
+
+  function floatTo16BitPCM(output, offset, input) {
+    for (var i = 0; i < input.length; i++, offset += 2) {
+      var s = Math.max(-1, Math.min(1, input[i]))
+      output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true)
+    }
+  }
+
+  function writeString(view, offset, string) {
+    for (var i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i))
+    }
+  }
+
+  function encodeWAV(samples, numChannels, sampleRate, format, bitDepth) {
+    var bytesPerSample = bitDepth / 8
+    var blockAlign = numChannels * bytesPerSample
+
+    var buffer = new ArrayBuffer(44 + samples.length * bytesPerSample)
+    var view = new DataView(buffer)
+
+    /* RIFF identifier */
+    writeString(view, 0, 'RIFF')
+    /* file length */
+    view.setUint32(4, 36 + samples.length * bytesPerSample, true)
+    /* RIFF type */
+    writeString(view, 8, 'WAVE')
+    /* format chunk identifier */
+    writeString(view, 12, 'fmt ')
+    /* format chunk length */
+    view.setUint32(16, 16, true)
+    /* sample format (raw) */
+    view.setUint16(20, format, true)
+    /* channel count */
+    view.setUint16(22, numChannels, true)
+    /* sample rate */
+    view.setUint32(24, sampleRate, true)
+    /* byte rate (sample rate * block align) */
+    view.setUint32(28, sampleRate * blockAlign, true)
+    /* block align (channel count * bytes per sample) */
+    view.setUint16(32, blockAlign, true)
+    /* bits per sample */
+    view.setUint16(34, bitDepth, true)
+    /* data chunk identifier */
+    writeString(view, 36, 'data')
+    /* data chunk length */
+    view.setUint32(40, samples.length * bytesPerSample, true)
+
+    if (format === 1) {
+      floatTo16BitPCM(view, 44, samples)
+    } else {
+      // 32-bit float
+      var offset = 44
+      for (var i = 0; i < samples.length; i++, offset += 4) {
+        view.setFloat32(offset, samples[i], true)
+      }
+    }
+
+    return new Blob([view], { type: format === 1 ? 'audio/wav' : 'audio/wav' })
+  }
+
+})();
+</script>
 </body>
 </html>
